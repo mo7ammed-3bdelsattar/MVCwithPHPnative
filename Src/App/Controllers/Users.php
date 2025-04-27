@@ -1,10 +1,10 @@
 <?php 
-namespace Src\App\Controllers;
-use Src\App\Models\User;
-class UserController{
+namespace App\Controllers;
+use App\Models\User;
+class Users{
     public function index(){
         $model = new User();
-        $users =$model->getData();
+        $users =$model->getUsers();
         require_once ('views/users/index.php');
     }
     public function show($id){

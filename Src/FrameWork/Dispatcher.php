@@ -1,10 +1,10 @@
 <?php
 
-namespace Src\FrameWork;
+namespace Framework;
 
 use ReflectionMethod;
 
-class Dispatching
+class Dispatcher
 {
     public function __construct(private Router $router) {}
     public function handle(string $path)
@@ -36,15 +36,15 @@ class Dispatching
     private function getControllerName(array $params): string
     {
         $controller = str_replace('-','',ucwords(strtolower($params['controller']) ,'-'));
-        $namespace="Src\App\Controllers\\";
+        $namespace="App\Controllers";
         if (array_key_exists("namespace", $params)) { 
-            $namespace .= $params['namespace']."\\";
+            $namespace .= $params['namespace'];
         }
-        return  $namespace."". $controller . "Controller";
+        return  $namespace."\\". $controller;
     }
-    private function getActionName(array $params): string
-    {
-        $action=str_replace('-','',ucwords(strtolower($params['action']) ,'-'));
-        return lcfirst($action);
+    private function getActionName(array $params):string{
+        $action = $params['action'];
+        $action =lcfirst(str_replace("-","",ucwords(strtolower($action), '-')));
+        return $action;
     }
 }

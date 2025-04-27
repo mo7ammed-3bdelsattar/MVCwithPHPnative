@@ -1,8 +1,8 @@
 <?php 
-namespace Src\App\Controllers;
-use Src\App\Models\User;
+namespace App\Controllers;
+use App\Models\User;
 
-class HomeController{
+class Home{
     public function index(){
         require_once ('views/home/index.php');
     }

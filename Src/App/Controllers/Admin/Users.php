@@ -1,8 +1,8 @@
 <?php
 
-namespace Src\App\Controllers\Admin;
+namespace App\Controllers\Admin;
 
-class UserController
+class Users
 {
     public function index(){
         echo "Admin Users Index";

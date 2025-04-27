@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\FrameWork;
+namespace Framework;
 
 class Router
 {
