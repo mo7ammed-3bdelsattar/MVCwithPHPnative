@@ -1,30 +1,17 @@
 <?php 
-namespace App\Models;
-use PDO;
-class User
-{
+declare(strict_types=1);
 
-public function getUsers()
+namespace App\Models;
+use Framework\Model;
+class User extends Model
 {
-    $dsn='mysql:host=localhost;dbname=php317;port=3306;charset=utf8';
-    $pdo=new PDO($dsn, 'root', '',[
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        ]);
-    $stm=$pdo->query("SELECT * FROM `user_info`");
-    return $stm->fetchAll(PDO::FETCH_ASSOC);
-}
-public function getUser($id){
-    $dsn='mysql:host=localhost;dbname=php317;port=3306;charset=utf8';
-    $pdo=new PDO($dsn, 'root', '',[
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        ]);
-    $stm=$pdo->query("SELECT * FROM `user_info` WHERE id=$id");
-    $row=$stm->fetchAll(PDO::FETCH_ASSOC);
-    if($row){
-        return $row;
-    }else{
-        return [];
+    protected $table='user_info';
+    
+    protected function validate(array $data){
+        if (empty($data['name'])){
+            $this->addError('name','Name is required');
+        }
     }
+    
 }
-}
-?>  
+?>

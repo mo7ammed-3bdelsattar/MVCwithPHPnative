@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Framework;
 
@@ -12,7 +13,7 @@ class Router
             "params" => $params
         ];
     }
-    public function match(string $path): array|bool
+    public function match(string $path ,string $method): array|bool
     {
         $path = urldecode($path);
         $path = trim($path, "/");
@@ -21,6 +22,11 @@ class Router
             if (preg_match($pattern, $path, $matches)) {
                 $matches = array_filter($matches, "is_string", ARRAY_FILTER_USE_KEY);
                 $params = array_merge($route["params"], $matches);
+                if(array_key_exists('method', $params)){
+                    if (strtolower($params['method']) !== strtolower($method)){
+                        continue;
+                    }
+                }
                 return $params;
             }
         }
