@@ -10,16 +10,17 @@ use Framework\Controller;
 
 class Users extends Controller
 {
-    
+
     public function __construct(private User $model) {}
 
     public function index(): Response
     {
         $users = $this->model->findAll();
         // echo $this->viewer->render('shared/header', ['title' => 'Users']);
-        return $this->view('users/index',['users' => $users,
-        'total' => $this->model->numRows()]);
-
+        return $this->view('users/index', [
+            'users' => $users,
+            'total' => $this->model->numRows()
+        ]);
     }
     public function show(string $id): Response
     {
@@ -37,14 +38,21 @@ class Users extends Controller
         $data = [
             'name' => $this->request->post['name'],
             'email' => $this->request->post['email'],
+            'password' => md5($this->request->post['password']),
         ];
-        $data['password'] = md5($this->request->post['password']);
-        if ($this->model->create($data)) {
-            return $this->redirect( "/users/{$this->model->getInsertId()}/show");
-        } else {
-            return $this->view('users/create', ['errors' => $this->model->getErrors(),
+        if ($this->model->findBy('email', $data['email'])) {
+            return $this->view('users/create', [
+                'errors' => ['email' => 'Email already exists'],
                 'user' => $data
-        ]);
+            ]);
+        }
+        if ($this->model->create($data)) {
+            return $this->redirect("/users/{$this->model->getInsertId()}/show");
+        } else {
+            return $this->view('users/create', [
+                'errors' => $this->model->getErrors(),
+                'user' => $data
+            ]);
         }
     }
     public function edit(string $id): Response
@@ -59,6 +67,14 @@ class Users extends Controller
         $user = $this->model->find($id);
         $user['name'] = $this->request->post['name'];
         $user['email'] = $this->request->post['email'];
+        $userByEmail = $this->model->findBy('email', $this->request->post['email']);
+        // exit(($userByEmail['id'] !== $user['id']));
+        if ($userByEmail && ($userByEmail['id'] !== $user['id'])) {
+            return $this->view('users/edit', [
+                'errors' => ['email' => 'Email already exists'],
+                'user' => $user
+            ]);
+        }
         if ($user['password'] !== $this->request->post['password']) {
             $user['password'] = md5($this->request->post['password']);
         }
@@ -71,11 +87,12 @@ class Users extends Controller
             ]);
         }
     }
-    public function destroy(string $id): Response{
+    public function destroy(string $id): Response
+    {
         $user = $this->model->find($id);
-        if($this->model->delete($id)){
+        if ($this->model->delete($id)) {
             return $this->redirect('/users');
-        }else{
+        } else {
             return $this->view('users/show', [
                 'errors' => $this->model->getErrors(),
                 'user' => $user

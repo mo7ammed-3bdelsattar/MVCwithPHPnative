@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+session_start();
 define("ROOT_PATH", dirname(__DIR__));
 spl_autoload_register(function ($class_name) {
     require_once (ROOT_PATH . "/src/" . str_replace("\\", "/",  $class_name) . ".php");
@@ -18,4 +19,5 @@ $middlewares=require_once(ROOT_PATH."/config/middleware.php");
 $dispatcher = new Framework\Dispatcher($router, $container , $middlewares);
 $request= Framework\Request::createFromGlobals();
 $respose = $dispatcher->handle($request);
+
 $respose->send();

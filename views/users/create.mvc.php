@@ -4,7 +4,7 @@
 <h1>Create New User</h1>
 <!-- ممكن تحط هنا رسالة نجاح أو خطأ -->
 {% if (!empty($successMessage)) : %}
-<div class="alert alert-success">{{successMessage}}</div>
+<div class="alert alert-success">{{$successMessage}}</div>
 {% endif; %}
 <!-- فورم إنشاء المستخدم -->
 <div class="container">

@@ -34,6 +34,10 @@ abstract class Model
     {
         return $this->errors;
     }
+    public function clearErrors(): void
+    {
+        $this->errors = [];
+    }
     public function getInsertId(): string|false
     {
         return $this->db->getConnection()->lastInsertId();
@@ -123,5 +127,13 @@ abstract class Model
         $stm = $this->db->getConnection()->query($sql);
         $row = $stm->fetch(PDO::FETCH_ASSOC);
         return (int) $row['total'];
+    }
+    public function findBy(string $field, string $value): array|bool
+    {
+        $sql = "SELECT * FROM {$this->getTable()} WHERE $field = :value";
+        $stm = $this->db->getConnection()->prepare($sql);
+        $stm->bindValue(':value', $value, PDO::PARAM_STR);
+        $stm->execute();
+        return $stm->fetch(PDO::FETCH_ASSOC) ?: false;
     }
 }

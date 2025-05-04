@@ -9,10 +9,10 @@
 </head>
 
 <body>
+    {% include "shared/nav.mvc.php" %}
     <h1 style="text-align:center;">{% yield title %}</h1>
     <div class="container">
         {% yield body %}
     </div>
 </body>
-
 </html>
